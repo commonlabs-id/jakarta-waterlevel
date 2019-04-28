@@ -1,0 +1,33 @@
+{
+  "alias": "jakarta-waterlevel",
+  "version": 2,
+  "env": {
+    "NODE_ENV": "production",
+    "JW_F_project_id": "@jwf_project_id",
+    "JW_F_private_key_id": "@jwf_private_key_id",
+    "JW_F_private_key": "@jwf_private_key",
+    "JW_F_client_email": "@jwf_client_email",
+    "JW_F_client_id": "@jwf_client_id",
+    "JW_F_auth_uri": "@jwf_auth_uri",
+    "JW_F_token_uri": "@jwf_token_uri",
+    "JW_F_auth_provider_x509_cert_url": "@jwf_auth_provider_x509_cert_url",
+    "JW_F_client_x509_cert_url": "@jwf_client_x509_cert_url"
+  },
+  "builds": [
+    {
+      "src": "api/routes/**/*.js",
+      "use": "@now/node",
+      "config": { "maxLambdaSize": "40mb" }
+    }
+  ],
+  "routes": [
+    { "src": "/update", "dest": "/api/routes/update.js" },
+    {
+      "src": "/",
+      "dest": "/api/routes/read.js",
+      "headers": {
+        "Cache-Control": "s-maxage=900, max-age=0"
+      }
+    }
+  ]
+}
