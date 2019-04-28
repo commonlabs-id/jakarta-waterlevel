@@ -1,3 +1,7 @@
+if (process.env.NODE_ENV !== "production") {
+  require("now-env");
+}
+
 const credential = {
   type: "service_account",
   project_id: process.env.JW_F_project_id,
