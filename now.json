@@ -17,7 +17,7 @@
     {
       "src": "api/routes/**/*.js",
       "use": "@now/node",
-      "config": { "maxLambdaSize": "40mb" }
+      "config": { "maxLambdaSize": "50mb" }
     }
   ],
   "routes": [
