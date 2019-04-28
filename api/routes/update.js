@@ -14,15 +14,16 @@ async function handler(req, res) {
     };
     const docRef = db.collection("levels").doc(date);
     await docRef.set(body);
-    send(res, 200, body);
+    send(res, 200, {
+      date,
+      status: "updated",
+      hours: levels.hours
+    });
   } catch (e) {
-    send(
-      res,
-      500,
-      `<h1>Server Error</h1><p>Sorry, there was a problem</p><p>${
-        e.message
-      }</p>`
-    );
+    send(res, 500, {
+      status: "error",
+      message: e.message
+    });
     console.error(e.message);
   }
 }
