@@ -1,18 +1,20 @@
+const IS_DEV = process.env.NODE_ENV !== "production";
+
 const chrome = require("chrome-aws-lambda");
-const core = require("puppeteer-core");
-const dev = require("puppeteer");
+const pptr = IS_DEV ? require("puppeteer") : require("puppeteer-core");
 
 const selectorTable = "table#listdatatable";
 
 async function extractLevels(url) {
-  const browser =
-    process.env.NODE_ENV === "production"
-      ? await core.launch({
+  const browser = await pptr.launch(
+    IS_DEV
+      ? {}
+      : {
           args: chrome.args,
           executablePath: await chrome.executablePath,
           headless: chrome.headless
-        })
-      : await dev.launch();
+        }
+  );
 
   const page = await browser.newPage();
 
