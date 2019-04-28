@@ -23,7 +23,7 @@ function processData(limitsRaw, levelsRaw) {
     const limits = processLimits({ s3, s2, s1 });
 
     levelsText.forEach((level, hoursIndex) => {
-      const [heightS, weather] = level.split(" ");
+      const [heightS, weather = "NA"] = level.split(" ");
       const hour = hours[hoursIndex];
       const height = Number(heightS);
       const hourData = {
@@ -56,8 +56,15 @@ function processData(limitsRaw, levelsRaw) {
 }
 
 function getWeatherLabel(weather) {
-  const valid = ["T", "MT", "M", "G", "H"];
-  const labels = ["Terang", "Mendung Tipis", "Mendung", "Gerimis", "Hujan"];
+  const valid = ["T", "MT", "M", "G", "H", "NA"];
+  const labels = [
+    "Terang",
+    "Mendung Tipis",
+    "Mendung",
+    "Gerimis",
+    "Hujan",
+    "Tidak Tersedia"
+  ];
   return valid.indexOf(weather) > -1 ? labels[valid.indexOf(weather)] : "";
 }
 
