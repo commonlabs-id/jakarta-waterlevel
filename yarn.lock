@@ -764,7 +764,7 @@ css-what@2.1:
   resolved "https://registry.yarnpkg.com/css-what/-/css-what-2.1.3.tgz#a6d7604573365fe74686c3f311c56513d88285f2"
   integrity sha512-a+EPoD+uZiNfh+5fxw2nO9QwFa6nJe2Or35fGY6Ipw1R3R4AGz1d1TEZrCegvw2YTmZ0jXirGYlzxxpYSHwpEg==
 
-cz-conventional-changelog@^2.1.0:
+cz-conventional-changelog@2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/cz-conventional-changelog/-/cz-conventional-changelog-2.1.0.tgz#2f4bc7390e3244e4df293e6ba351e4c740a7c764"
   integrity sha1-L0vHOQ4yROTfKT5ro1Hkx0Cnx2Q=
@@ -789,12 +789,12 @@ date-extended@~0.0.3:
     extended "~0.0.3"
     is-extended "~0.0.3"
 
-date-fns-tz@^1.0.7:
+date-fns-tz@1.0.7:
   version "1.0.7"
   resolved "https://registry.yarnpkg.com/date-fns-tz/-/date-fns-tz-1.0.7.tgz#1c80f7592cca5da4fd2085132936dcc7fa9afecd"
   integrity sha512-oNfi/3IxRfmysRIT+QJMbO/44Uj10nApAYJvlayTmNRFZG+JqdOJYXm1DWU65DNlG/ySbuQwpFkGIa3b2XFUVw==
 
-date-fns@^2.0.0-alpha.27:
+date-fns@2.0.0-alpha.27:
   version "2.0.0-alpha.27"
   resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-2.0.0-alpha.27.tgz#5ecd4204ef0e7064264039570f6e8afbc014481c"
   integrity sha512-cqfVLS+346P/Mpj2RpDrBv0P4p2zZhWWvfY5fuWrXNR/K38HaAGEkeOwb47hIpQP9Jr/TIxjZ2/sNMQwdXuGMg==
@@ -1107,7 +1107,7 @@ extract-zip@^1.6.6:
     mkdirp "0.5.1"
     yauzl "2.4.1"
 
-fast-csv@^2.5.0:
+fast-csv@2.5.0:
   version "2.5.0"
   resolved "https://registry.yarnpkg.com/fast-csv/-/fast-csv-2.5.0.tgz#5332dfede3f59340cb8e9f46b2e6dff1e7612005"
   integrity sha512-M/9ezLU9/uDwvDZTt9sNFJa0iLDUsbhYJwPtnE0D9MjeuB6DY9wRCyUPZta9iI6cSz5wBWGaUPL61QH8h92cNA==
@@ -1154,7 +1154,7 @@ find-up@^2.1.0:
   dependencies:
     locate-path "^2.0.0"
 
-firebase-admin@^7.3.0:
+firebase-admin@7.3.0:
   version "7.3.0"
   resolved "https://registry.yarnpkg.com/firebase-admin/-/firebase-admin-7.3.0.tgz#be9940fbabb58fc6a4404ac52c6a1e1b14b2ea38"
   integrity sha512-G+gUU+u+8Mr/8IELeXA/44VYrGM6EEvUgYm5F6I5/oO6clUbM8b8x9QJasSeD14KQmP3iAPXcKQUALgH1wY+Vw==
@@ -1900,7 +1900,7 @@ mem@^1.1.0:
   dependencies:
     mimic-fn "^1.0.0"
 
-micro-dev@^3.0.0:
+micro-dev@3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/micro-dev/-/micro-dev-3.0.0.tgz#cea7ef2b4318765b74004e98ec92ac7e12fcff37"
   integrity sha512-hxI93KdT7Y8utmVn3NsXqMEKOQj0RpHiY1+PW8rtbiDyd3e/D6NN7OEdG8R0uSFI3GuJbkYN76Z2QTZafyfN/w==
@@ -1919,7 +1919,7 @@ micro-dev@^3.0.0:
     pretty-error "2.1.1"
     string-length "2.0.0"
 
-micro@^9.3.3:
+micro@9.3.3:
   version "9.3.3"
   resolved "https://registry.yarnpkg.com/micro/-/micro-9.3.3.tgz#32728c7be15e807691ead85da27fd8117a8bca24"
   integrity sha512-GbCp4NFQguARch0odX+BuWDja2Kc1pbYZqWfRvEDihGFTJG8U77C0L+Owg2j7TPyhQ5Tc+7z/SxspRqjdiZCjQ==
@@ -2115,7 +2115,7 @@ normalize-path@^2.1.1:
   dependencies:
     remove-trailing-separator "^1.0.1"
 
-now-env@^3.1.0:
+now-env@3.1.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/now-env/-/now-env-3.1.0.tgz#e0198b67279d387229cfd4b25de4c2fc7156943f"
   integrity sha512-f+jXC+UkoxD/g9Nlig99Bxswoh7UUuQxw0EsPfuueHnVpVE0LfgQ4el5dxY4TSXwrL9mEF9GGm0gb7r3K8r/ug==
@@ -2416,7 +2416,7 @@ puppeteer-core@1.11.0:
     rimraf "^2.6.1"
     ws "^6.1.0"
 
-puppeteer@^1.15.0:
+puppeteer@1.15.0:
   version "1.15.0"
   resolved "https://registry.yarnpkg.com/puppeteer/-/puppeteer-1.15.0.tgz#1680fac13e51f609143149a5b7fa99eec392b34f"
   integrity sha512-D2y5kwA9SsYkNUmcBzu9WZ4V1SGHiQTmgvDZSx6sRYFsgV25IebL4V6FaHjF6MbwLK9C6f3G3pmck9qmwM8H3w==

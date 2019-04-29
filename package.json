@@ -5,18 +5,18 @@
   "license": "MIT",
   "dependencies": {
     "chrome-aws-lambda": "1.11.1",
-    "date-fns": "^2.0.0-alpha.27",
-    "date-fns-tz": "^1.0.7",
-    "fast-csv": "^2.5.0",
-    "firebase-admin": "^7.3.0",
-    "micro": "^9.3.3",
+    "date-fns": "2.0.0-alpha.27",
+    "date-fns-tz": "1.0.7",
+    "fast-csv": "2.5.0",
+    "firebase-admin": "7.3.0",
+    "micro": "9.3.3",
     "puppeteer-core": "1.11.0"
   },
   "devDependencies": {
-    "cz-conventional-changelog": "^2.1.0",
-    "micro-dev": "^3.0.0",
-    "now-env": "^3.1.0",
-    "puppeteer": "^1.15.0"
+    "cz-conventional-changelog": "2.1.0",
+    "micro-dev": "3.0.0",
+    "now-env": "3.1.0",
+    "puppeteer": "1.15.0"
   },
   "config": {
     "commitizen": {
