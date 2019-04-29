@@ -16,7 +16,7 @@
   "builds": [
     {
       "src": "api/routes/**/*.js",
-      "use": "@now/node",
+      "use": "@now/node@canary",
       "config": { "maxLambdaSize": "50mb" }
     }
   ],
