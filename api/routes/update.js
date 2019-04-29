@@ -6,7 +6,8 @@ const { getLevelsData } = require("../levels");
 
 async function handler(req, res) {
   try {
-    const date = format(new Date(), "DD-MM-YYYY");
+    const now = new Date();
+    const date = format(now, "dd-MM-yyyy", { timeZone: "Asia/Jakarta" });
     const levels = await getLevelsData();
     const body = {
       date,
@@ -16,6 +17,7 @@ async function handler(req, res) {
     await docRef.set(body);
     send(res, 200, {
       date,
+      now,
       status: "updated",
       hours: levels.hours
     });

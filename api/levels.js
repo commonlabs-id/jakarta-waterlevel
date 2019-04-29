@@ -25,12 +25,12 @@ function processData(limitsRaw, levelsRaw) {
     levelsText.forEach((level, hoursIndex) => {
       const [heightS, weather = "NA"] = level.split(" ");
       const hour = hours[hoursIndex];
-      const height = Number(heightS);
+      const depth = Number(heightS);
       const hourData = {
-        height,
+        depth,
         weather,
         weatherLabel: getWeatherLabel(weather),
-        status: getStatus(height, limits)
+        status: getStatus(depth, limits)
       };
       levels[hour] = hourData;
       if (hoursIndex === levelsText.length - 1) {
