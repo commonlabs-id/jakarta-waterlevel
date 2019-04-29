@@ -10,8 +10,7 @@
     "fast-csv": "^2.5.0",
     "firebase-admin": "^7.3.0",
     "micro": "^9.3.3",
-    "puppeteer-core": "1.11.0",
-    "tabletojson": "^1.0.4"
+    "puppeteer-core": "1.11.0"
   },
   "devDependencies": {
     "cz-conventional-changelog": "^2.1.0",
