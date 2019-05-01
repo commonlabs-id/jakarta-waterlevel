@@ -1,7 +1,7 @@
 const { send } = require("micro");
 const { format } = require("date-fns");
 
-const { db } = require("../firebase/firestore");
+const { updateLevelsOnDate } = require("../firebase/firestore");
 const { getLevelsData } = require("../levels");
 
 async function handler(_, res) {
@@ -13,8 +13,7 @@ async function handler(_, res) {
       date,
       ...levels
     };
-    const docRef = db.collection("levels").doc(date);
-    await docRef.set(body);
+    await updateLevelsOnDate(date, body);
     return send(res, 200, {
       date,
       now,
@@ -22,11 +21,11 @@ async function handler(_, res) {
       hours: levels.hours
     });
   } catch (e) {
+    console.error(e);
     return send(res, 500, {
       status: "error",
       message: e.message
     });
-    console.error(e);
   }
 }
 module.exports = handler;
