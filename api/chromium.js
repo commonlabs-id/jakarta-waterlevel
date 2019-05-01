@@ -1,38 +1,62 @@
-const IS_DEV = process.env.NODE_ENV !== "production";
-
 const chrome = require("chrome-aws-lambda");
-const pptr = IS_DEV ? require("puppeteer") : require("puppeteer-core");
+const puppeteer = require("puppeteer-core");
 
+const exePath =
+  process.platform === "win32"
+    ? "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe"
+    : "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
+
+const blockThese = ["image", "stylesheet", "font", "script"];
 const selectorTable = "table#listdatatable";
+let _page = null;
 
-async function extractLevels(url) {
-  const browser = await pptr.launch(
-    IS_DEV
-      ? {}
-      : {
-          args: chrome.args,
-          executablePath: await chrome.executablePath,
-          headless: chrome.headless
-        }
-  );
+async function getOptions(isDev) {
+  let options = {};
+  if (isDev) {
+    options = {
+      args: [],
+      executablePath: exePath,
+      headless: true
+    };
+  } else {
+    options = {
+      args: chrome.args,
+      executablePath: await chrome.executablePath,
+      headless: chrome.headless
+    };
+  }
+  return options;
+}
 
-  const page = await browser.newPage();
-
-  // block these
-  const blockThese = ["image", "stylesheet", "font", "script"];
-
-  await page.setRequestInterception(true);
-  page.on("request", request => {
+async function getPage(isDev) {
+  if (_page) {
+    console.log("reusing page");
+    return _page;
+  }
+  console.log("creating new page");
+  const options = await getOptions(isDev);
+  console.log("got options");
+  const browser = await puppeteer.launch(options);
+  console.log("browser launched");
+  _page = await browser.newPage();
+  await _page.setRequestInterception(true);
+  _page.on("request", request => {
     if (blockThese.indexOf(request.resourceType()) !== -1) request.abort();
     else request.continue();
   });
+  return _page;
+}
 
+async function getTables(url, isDev) {
+  const page = await getPage(isDev);
+  console.log("page ready");
+  console.log("going to ", url);
   await page.goto(url, {
     timeout: 3000000
   });
 
   await page.waitForSelector(selectorTable);
-
+  console.log("selector ready, evaluating");
   const [limits, levels] = await page.evaluate(s => {
     const tables = Array.from(document.querySelectorAll(s));
     return tables.map(table => {
@@ -40,9 +64,9 @@ async function extractLevels(url) {
     });
   }, selectorTable);
 
-  await browser.close();
+  console.log("evaluated");
 
   return [limits, levels];
 }
 
-module.exports = { extractLevels };
+module.exports = { getTables, extractLevels: getTables };

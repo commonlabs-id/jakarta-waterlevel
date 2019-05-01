@@ -1,0 +1,4 @@
+*
+!api
+!api/**
+api/firebase/service-account.json

@@ -1,9 +1,12 @@
 const { extractLevels } = require("./chromium");
 
 const URL = "https://bpbd.jakarta.go.id/waterlevel/";
+const isDev = process.env.NOW_REGION === "dev1";
+
+console.log({ isDev });
 
 async function getLevelsData() {
-  const [limits, levels] = await extractLevels(URL);
+  const [limits, levels] = await extractLevels(URL, isDev);
   return processData(limits, levels);
 }
 

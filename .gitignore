@@ -1,3 +1,4 @@
+.env
 service-account.json
 now-secrets.json
 # Created by https://www.gitignore.io/api/node
