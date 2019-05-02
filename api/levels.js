@@ -46,6 +46,7 @@ function processData(limitsRaw, levelsRaw) {
 
     return {
       name,
+      hours,
       current,
       levels,
       limits
@@ -53,7 +54,6 @@ function processData(limitsRaw, levelsRaw) {
   });
 
   return {
-    hours,
     points
   };
 }

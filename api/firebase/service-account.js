@@ -1,5 +1,5 @@
 if (process.env.NODE_ENV !== "production") {
-  require("now-env");
+  require("dotenv").config();
 }
 
 const credential = {
