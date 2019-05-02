@@ -1,0 +1,13 @@
+{
+  "name": "api",
+  "version": "1.0.0",
+  "dependencies": {
+    "chrome-aws-lambda": "1.11.1",
+    "date-fns": "2.0.0-alpha.27",
+    "date-fns-tz": "1.0.7",
+    "firebase-admin": "7.3.0",
+    "micro": "^9.3.3",
+    "puppeteer-core": "1.11.0"
+  },
+  "private": true
+}

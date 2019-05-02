@@ -1,13 +1,12 @@
 const { send } = require("micro");
-const { format } = require("date-fns");
 
-const { updateLevelsOnDate } = require("../firebase/firestore");
+const { updateLevelsOnDate } = require("../firebase/operations");
 const { getLevelsData } = require("../levels");
+const { getDateString } = require("../utils/time");
 
 async function handler(_, res) {
+  const date = getDateString(new Date());
   try {
-    const now = new Date();
-    const date = format(now, "dd-MM-yyyy", { timeZone: "Asia/Jakarta" });
     const levels = await getLevelsData();
     const body = {
       date,
@@ -15,8 +14,6 @@ async function handler(_, res) {
     };
     await updateLevelsOnDate(date, body);
     return send(res, 200, {
-      date,
-      now,
       status: "updated",
       hours: levels.hours
     });
@@ -28,4 +25,5 @@ async function handler(_, res) {
     });
   }
 }
+
 module.exports = handler;
