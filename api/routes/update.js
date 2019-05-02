@@ -14,8 +14,7 @@ async function handler(_, res) {
     };
     await updateLevelsOnDate(date, body);
     return send(res, 200, {
-      status: "updated",
-      hours: levels.hours
+      status: "updated"
     });
   } catch (e) {
     console.error(e);
