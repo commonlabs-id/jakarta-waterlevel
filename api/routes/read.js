@@ -1,6 +1,6 @@
 const { send } = require("micro");
 
-const { readLevelsOnDate } = require("../firebase/firestore");
+const { readLevelsOnDate } = require("../firebase/operations");
 const { getDateString } = require("../utils/time");
 
 async function handler(req, res) {
