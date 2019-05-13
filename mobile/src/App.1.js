@@ -9,8 +9,11 @@ import {
 } from "react-native";
 import { AppLoading, Asset, Video } from "expo";
 
+import { getLocaleDateString } from "./util/dates";
+import Points from "./components/points";
+
 // set path to local video
-const videoSource = require("./assets/video/wave.mp4");
+const videoSource = require("../assets/video/wave.mp4");
 
 const { height, width } = Dimensions.get("window");
 
@@ -19,16 +22,20 @@ export default class App extends React.Component {
     backgroundOpacity: new Animated.Value(0),
     loaded: false,
     videoHeight: (width * 9) / 16,
-    videoWidth: width
+    videoWidth: width,
+    data: null
   };
 
   async componentWillMount() {
     // wait for video to download
-    await Asset.fromModule(videoSource).downloadAsync();
-
+    const [_, data] = await Promise.all([
+      Asset.fromModule(videoSource).downloadAsync(),
+      fetch("https://waterlevel.mathdroid.now.sh").then(resp => resp.json())
+    ]);
     // once loaded, update state
     this.setState({
-      loaded: true
+      loaded: true,
+      data
     });
   }
 
@@ -83,7 +90,7 @@ export default class App extends React.Component {
           style={{
             marginTop: -150,
             alignItems: "flex-start",
-            justifyContent: "center",
+            justifyContent: "flex-start",
             flexDirection: "column",
             marginHorizontal: 16
           }}
@@ -91,12 +98,20 @@ export default class App extends React.Component {
           <Text
             style={{
               color: "#fff",
-              fontSize: 48,
-              marginBottom: 16,
-              alignSelf: "center"
+              fontSize: 32,
+              fontWeight: "bold"
             }}
           >
-            🌊
+            Jakarta Waterlevel
+          </Text>
+
+          <Text
+            style={{
+              color: "#fff",
+              marginBottom: 16
+            }}
+          >
+            {getLocaleDateString(new Date())}
           </Text>
           <View
             style={{
@@ -104,7 +119,7 @@ export default class App extends React.Component {
               padding: 16,
               backgroundColor: "#fff",
               borderRadius: 4,
-              ...elevationShadowStyle(5)
+              ...elevationShadowStyle(3)
             }}
           >
             <Text>
@@ -113,6 +128,7 @@ export default class App extends React.Component {
             </Text>
           </View>
         </View>
+        <Points points={this.state.data.points} date={this.state.data.date} />
       </ScrollView>
     );
   }
