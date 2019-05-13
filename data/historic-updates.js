@@ -6,12 +6,8 @@ const csv = require("fast-csv");
 // const { db } = require("../api/firebase/firestore");
 const { updateLevelsOnDate } = require("../api/firebase/operations");
 
-const timeZone = "Asia/Jakarta";
-
 const file = join(__dirname, "data-tinggi-muka-air-april-2019.csv");
 var stream = createReadStream(file);
-
-let count = 0;
 
 const HEADERS = {
   JANUARY: [

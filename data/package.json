@@ -1,0 +1,9 @@
+{
+  "name": "data",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "fast-csv": "2.5.0"
+  }
+}
