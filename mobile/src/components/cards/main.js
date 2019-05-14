@@ -15,7 +15,7 @@ const style = StyleSheet.create({
     padding: 16,
     backgroundColor: "#fff",
     borderRadius: 4,
-    ...elevationShadowStyle(3),
+    ...elevationShadowStyle(1),
     marginBottom: 32
   }
 });

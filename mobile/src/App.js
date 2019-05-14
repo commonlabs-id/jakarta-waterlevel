@@ -54,13 +54,13 @@ export default class App extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff"
+    backgroundColor: "#eee"
   },
   card: {
     padding: 16,
     backgroundColor: "#fff",
     borderRadius: 4,
-    ...elevationShadowStyle(3),
+    ...elevationShadowStyle(1),
     marginBottom: 32
   },
   contentContainer: {
