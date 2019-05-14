@@ -12,6 +12,6 @@
   "scripts": {
     "start": "nf start",
     "web": "node server.js",
-    "queue": "node worker.js"
+    "worker": "node worker.js"
   }
 }
