@@ -7,12 +7,14 @@
   "workspaces": [
     "api",
     "mobile",
-    "data"
+    "data",
+    "queue"
   ],
   "scripts": {
     "api": "yarn workspace api",
     "mobile": "yarn workspace mobile",
-    "data": "yarn workspace data"
+    "data": "yarn workspace data",
+    "queue": "yarn workspace queue"
   },
   "devDependencies": {
     "cz-conventional-changelog": "2.1.0",
