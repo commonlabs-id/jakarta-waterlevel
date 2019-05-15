@@ -18,8 +18,7 @@ let arenaConfig = Arena(
     ]
   },
   {
-    basePath: "/",
-    disableListen: true,
+    disableListen: false,
     useCdn: false
   }
 );
