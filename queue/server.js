@@ -46,7 +46,7 @@ app.get("/job/:id", async (req, res) => {
   }
 });
 
-app.get("/", arenaConfig);
+app.get("*", arenaConfig);
 
 workQueue.on("global:completed", (jobId, result) => {
   console.log(`Job ${jobId} completed with result ${result}`);
