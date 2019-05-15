@@ -6,7 +6,7 @@ let REDIS_URL = process.env.REDIS_URL || "redis://127.0.0.1:6379";
 
 let app = express();
 
-let workQueue = new Queue("scraper", REDIS_URL);
+let workQueue = new Queue("waterlevel", REDIS_URL);
 
 app.get("/", (req, res) => res.sendFile("index.html", { root: __dirname }));
 app.get("/client.js", (req, res) =>
@@ -14,7 +14,7 @@ app.get("/client.js", (req, res) =>
 );
 
 app.post("/job", async (req, res) => {
-  let job = await workQueue.add();
+  let job = await workQueue.add("work");
   res.json({ id: job.id });
 });
 

@@ -11,12 +11,10 @@ let workers = process.env.WEB_CONCURRENCY || 2;
 let maxJobsPerWorker = 50;
 
 function start() {
-  let workQueue = new Queue("work", REDIS_URL);
-  let scraperQueue = new Queue("scraper", REDIS_URL);
-  let notifierQueue = new Queue("notifier", REDIS_URL);
-  workQueue.process(maxJobsPerWorker, workProcessor);
-  scraperQueue.process(2, scraperProcessor);
-  notifierQueue.process(maxJobsPerWorker, workProcessor);
+  let workQueue = new Queue("waterlevel", REDIS_URL);
+  workQueue.process("work", maxJobsPerWorker, workProcessor);
+  workQueue.process("scraper", 2, scraperProcessor);
+  workQueue.process("notifier", maxJobsPerWorker, workProcessor);
 }
 
 throng({ workers, start });
