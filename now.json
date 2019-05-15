@@ -11,7 +11,8 @@
     "JW_F_auth_uri": "@jwf_auth_uri",
     "JW_F_token_uri": "@jwf_token_uri",
     "JW_F_auth_provider_x509_cert_url": "@jwf_auth_provider_x509_cert_url",
-    "JW_F_client_x509_cert_url": "@jwf_client_x509_cert_url"
+    "JW_F_client_x509_cert_url": "@jwf_client_x509_cert_url",
+    "JW_REDIS_URL": "@jw_redis_url"
   },
   "builds": [
     {
