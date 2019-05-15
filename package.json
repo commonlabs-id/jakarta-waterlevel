@@ -11,10 +11,10 @@
     "queue"
   ],
   "scripts": {
-    "api": "yarn workspace api",
-    "mobile": "yarn workspace mobile",
-    "database": "yarn workspace database",
-    "queue": "yarn workspace queue"
+    "api": "yarn workspace jw-api",
+    "mobile": "yarn workspace jw-mobile",
+    "database": "yarn workspace jw-database",
+    "queue": "yarn workspace jw-queue"
   },
   "devDependencies": {
     "cz-conventional-changelog": "2.1.0",
