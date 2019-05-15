@@ -1,5 +1,4 @@
-const chrome = require("chrome-aws-lambda");
-const puppeteer = require("puppeteer-core");
+const puppeteer = require("puppeteer");
 
 const exePath =
   process.platform === "win32"
@@ -20,9 +19,7 @@ async function getOptions(isDev) {
     };
   } else {
     options = {
-      args: chrome.args,
-      executablePath: await chrome.executablePath,
-      headless: chrome.headless
+      args: ["--no-sandbox"]
     };
   }
   return options;
