@@ -1,4 +1,9 @@
 *
+!package.json
+!yarn.lock
 !api
 !api/**
-api/firebase/service-account.json
+!database
+!database/**
+database/data
+database/service-account.json

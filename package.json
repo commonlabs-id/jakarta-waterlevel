@@ -1,5 +1,5 @@
 {
-  "name": "waterlevel",
+  "name": "jakarta-waterlevel",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
@@ -7,13 +7,13 @@
   "workspaces": [
     "api",
     "mobile",
-    "data",
+    "database",
     "queue"
   ],
   "scripts": {
     "api": "yarn workspace api",
     "mobile": "yarn workspace mobile",
-    "data": "yarn workspace data",
+    "database": "yarn workspace database",
     "queue": "yarn workspace queue"
   },
   "devDependencies": {

@@ -1,9 +1,13 @@
 {
-  "name": "data",
+  "name": "jw-database",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
+  "private": true,
   "dependencies": {
+    "firebase-admin": "^7.3.0"
+  },
+  "devDependencies": {
     "fast-csv": "2.5.0"
   }
 }
