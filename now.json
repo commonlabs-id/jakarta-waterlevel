@@ -2,6 +2,7 @@
   "alias": "jakarta-waterlevel",
   "scope": "mathdroid",
   "version": 2,
+  "regions": ["sin1"],
   "env": {
     "NODE_ENV": "production",
     "JW_F_project_id": "@jwf_project_id",
