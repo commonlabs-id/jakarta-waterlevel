@@ -1,5 +1,5 @@
 {
-  "alias": "jakarta-waterlevel",
+  "alias": ["jakarta-waterlevel", "waterlevel.mathdroid.now.sh"],
   "scope": "mathdroid",
   "version": 2,
   "regions": ["sin1"],
