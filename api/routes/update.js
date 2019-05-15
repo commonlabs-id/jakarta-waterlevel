@@ -13,9 +13,9 @@ async function handler(_, res) {
   try {
     if (!workQueue) {
       console.log(`connecting to ${REDIS_URL}`);
-      workQueue = new Queue("waterlevel", REDIS_URL);
+      workQueue = new Queue("scraper", REDIS_URL);
     }
-    const job = await workQueue.add("scraper", { date });
+    const job = await workQueue.add("scrape", { date });
     const body = {
       date,
       id: job.id
