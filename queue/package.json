@@ -5,7 +5,6 @@
   "license": "MIT",
   "dependencies": {
     "bull": "^3.9.1",
-    "bull-arena": "^2.6.3",
     "express": "^4.16.4",
     "throng": "^4.0.0"
   },
