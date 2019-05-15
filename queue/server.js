@@ -10,7 +10,7 @@ let arenaConfig = Arena(
     queues: [
       {
         name: "work",
-        hostId: "Waterlevel",
+        hostId: "waterlevel",
         redis: {
           url: REDIS_URL
         }
@@ -19,7 +19,8 @@ let arenaConfig = Arena(
   },
   {
     basePath: "/",
-    disableListen: true
+    disableListen: true,
+    useCdn: false
   }
 );
 
