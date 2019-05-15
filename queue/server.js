@@ -18,7 +18,7 @@ let arenaConfig = Arena(
     ]
   },
   {
-    basePath: "/",
+    basePath: "/arena",
     disableListen: true
   }
 );
@@ -26,8 +26,6 @@ let arenaConfig = Arena(
 let app = express();
 
 let workQueue = new Queue("work", REDIS_URL);
-
-app.get("/", arenaConfig);
 
 app.post("/job", async (req, res) => {
   let job = await workQueue.add();
@@ -47,6 +45,8 @@ app.get("/job/:id", async (req, res) => {
     res.json({ id, state, progress, reason });
   }
 });
+
+app.get("/", arenaConfig);
 
 workQueue.on("global:completed", (jobId, result) => {
   console.log(`Job ${jobId} completed with result ${result}`);
