@@ -18,7 +18,7 @@ let arenaConfig = Arena(
     ]
   },
   {
-    basePath: "/arena",
+    basePath: "/",
     disableListen: true
   }
 );
@@ -46,7 +46,7 @@ app.get("/job/:id", async (req, res) => {
   }
 });
 
-app.get("*", arenaConfig);
+app.use("/", arenaConfig);
 
 workQueue.on("global:completed", (jobId, result) => {
   console.log(`Job ${jobId} completed with result ${result}`);
