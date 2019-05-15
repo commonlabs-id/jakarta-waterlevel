@@ -1,17 +1,12 @@
 {
   "alias": "jakarta-waterlevel",
+  "scope": "mathdroid",
   "version": 2,
   "env": {
     "NODE_ENV": "production",
     "JW_F_project_id": "@jwf_project_id",
-    "JW_F_private_key_id": "@jwf_private_key_id",
     "JW_F_private_key": "@jwf_private_key",
     "JW_F_client_email": "@jwf_client_email",
-    "JW_F_client_id": "@jwf_client_id",
-    "JW_F_auth_uri": "@jwf_auth_uri",
-    "JW_F_token_uri": "@jwf_token_uri",
-    "JW_F_auth_provider_x509_cert_url": "@jwf_auth_provider_x509_cert_url",
-    "JW_F_client_x509_cert_url": "@jwf_client_x509_cert_url",
     "JW_REDIS_URL": "@jw_redis_url"
   },
   "builds": [

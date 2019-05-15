@@ -2,6 +2,7 @@
   "name": "api",
   "version": "1.0.0",
   "dependencies": {
+    "bull": "^3.9.1",
     "chrome-aws-lambda": "1.11.1",
     "date-fns": "2.0.0-alpha.27",
     "date-fns-tz": "1.0.7",

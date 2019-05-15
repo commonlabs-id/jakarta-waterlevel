@@ -9,7 +9,7 @@
     "throng": "^4.0.0"
   },
   "scripts": {
-    "web": "node server.js",
-    "worker": "node worker.js"
+    "web": "node server",
+    "worker": "node worker"
   }
 }
