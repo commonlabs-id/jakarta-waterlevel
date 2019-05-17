@@ -1,5 +1,6 @@
 let express = require("express");
 let Queue = require("bull");
+let Arena = require("bull-arena");
 
 let PORT = process.env.PORT || "5000";
 let REDIS_URL = process.env.REDIS_URL || "redis://127.0.0.1:6379";
@@ -8,10 +9,40 @@ let app = express();
 
 let workQueue = new Queue("waterlevel", REDIS_URL);
 
-app.get("/", (req, res) => res.sendFile("index.html", { root: __dirname }));
-app.get("/client.js", (req, res) =>
-  res.sendFile("client.js", { root: __dirname })
+let arena = Arena(
+  {
+    queues: [
+      {
+        name: "work",
+        hostId: "waterlevel",
+        type: "bull",
+        url: REDIS_URL
+      },
+      {
+        name: "scraper",
+        hostId: "waterlevel",
+        type: "bull",
+        url: REDIS_URL
+      },
+      {
+        name: "notifier",
+        hostId: "waterlevel",
+        type: "bull",
+        url: REDIS_URL
+      }
+    ]
+  },
+  {
+    disableListen: true
+  }
 );
+
+app.use("/", arena);
+
+// app.get("/", (req, res) => res.sendFile("index.html", { root: __dirname }));
+// app.get("/client.js", (req, res) =>
+//   res.sendFile("client.js", { root: __dirname })
+// );
 
 app.post("/job", async (req, res) => {
   let job = await workQueue.add("work");
