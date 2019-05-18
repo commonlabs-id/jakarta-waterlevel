@@ -23,7 +23,7 @@
       "src": "/",
       "dest": "/api/routes/read.js",
       "headers": {
-        "Cache-Control": "s-maxage=450, max-age=0"
+        "Cache-Control": "s-maxage=1, maxage=0, stale-while-revalidate"
       }
     }
   ]
