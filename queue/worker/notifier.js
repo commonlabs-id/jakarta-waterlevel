@@ -5,12 +5,7 @@ function sleep(ms) {
 const workProcessor = async job => {
   let progress = 0;
 
-  console.log("data", job.data);
-
-  // throw an error 5% of the time
-  if (Math.random() < 0.05) {
-    throw new Error("This job failed!");
-  }
+  console.log("Notice", job.data);
 
   while (progress < 100) {
     await sleep(50);
@@ -18,7 +13,7 @@ const workProcessor = async job => {
     job.progress(progress);
   }
 
-  return { value: "This will be stored" };
+  return {value: 'ok', date};
 };
 
 module.exports = workProcessor;

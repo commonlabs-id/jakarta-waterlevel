@@ -1,10 +1,5 @@
 const puppeteer = require("puppeteer");
 
-const exePath =
-  process.platform === "win32"
-    ? "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe"
-    : "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
-
 const blockThese = ["image", "stylesheet", "font", "script"];
 const selectorTable = "table#listdatatable";
 const selectorForm = "form#waterlevelform";
@@ -50,14 +45,14 @@ async function getPage(isDev) {
 
 async function getTables(url, isDev, date = null) {
   const page = await getPage(isDev);
-  console.log("page ready");
-  console.log("going to", url);
+  console.log(date, "page ready");
+  console.log(date, "going to", url);
   await page.goto(url, {
     timeout: 3000000
   });
 
   if (date) {
-    console.log("waiting for form", selectorForm);
+    console.log(date, "waiting for form", selectorForm);
     await page.$eval(
       selectorFormInput,
       (i, date) => (i.value = date),
@@ -66,9 +61,9 @@ async function getTables(url, isDev, date = null) {
     await page.$eval(selectorForm, form => form.submit());
   }
 
-  console.log("waiting for selector", selectorTable);
+  console.log(date, "waiting for selector", selectorTable);
   await page.waitForSelector(selectorTable);
-  console.log("selector ready, evaluating");
+  console.log(date, "selector ready, evaluating");
   const [limits, levels] = await page.evaluate(s => {
     const tables = Array.from(document.querySelectorAll(s));
     return tables.map(table => {
@@ -76,7 +71,7 @@ async function getTables(url, isDev, date = null) {
     });
   }, selectorTable);
 
-  console.log("evaluated");
+  console.log(date, "evaluated");
 
   return [limits, levels];
 }

@@ -1,19 +1,88 @@
+const { parse, subDays, format } = require("date-fns");
+const Queue = require("bull");
+
+const { updateLevelsOnDate, readLevelsOnDate } = require("jw-database");
 const { getLevelsData } = require("../util/levels.js");
-const { updateLevelsOnDate } = require("jw-database");
+const { getDateString } = require("../util/time.js");
+
+let REDIS_URL = process.env.REDIS_URL || "redis://127.0.0.1:6379";
 
 const scraper = async job => {
-  const { date } = job.data;
+  console.log("working on job id", job.id);
+  const { date, days = 0 } = job.data;
+  const dateString = getDateString(date);
+  console.log("scraping", dateString);
+
+  if (days > 0) {
+    let scraperQ = new Queue("scraper", REDIS_URL);
+    await scraperQ.add(
+      "scrape",
+      { date: subDays(new Date(date), 1), days: days - 1 },
+      {
+        attempts: 10,
+        backoff: 500
+      }
+    );
+    await scraperQ.close()
+
+  }
   try {
-    const levels = await getLevelsData();
+    let existing = undefined;
+    existing = await readLevelsOnDate(dateString);
+    job.progress(20);
+
+    if (!existing) {
+      existing = await readLevelsOnDate(getDateString(date, 1));
+    }
+
+    job.progress(25);
+    const [y, m, d] = dateString.split("-");
+    const levels = await getLevelsData(`${d}-${m}-${y}`);
     job.progress(50);
-    await updateLevelsOnDate(date, {
-      date,
+
+    const doc = {
+      date: dateString,
       ...levels
-    });
+    };
+
+    if (typeof existing !== "undefined") {
+      for (let i = 0; i < doc.points.length; i++) {
+        const { name, current } = doc.points[i];
+        const existingPoint = existing.points.find(ep => ep.name === name);
+        if (typeof existingPoint !== "undefined") {
+          if (existingPoint.current.status.siaga !== current.status.siaga) {
+            console.log(
+              name,
+              existing.date,
+              existingPoint.current.time,
+              existingPoint.current.status.siaga,
+              "->",
+              current.status.siaga,
+              doc.date,
+              current.time
+            );
+            let notifier = new Queue("notifier", REDIS_URL);
+            await notifier.add("notify", { name, current: {
+              ...current,
+              date: doc.date
+            }, existingCurrent: {
+              ...existingPoint.current,
+              date: existing.date
+            } });
+            await notifier.close()
+          }
+        }
+      }
+    }
+
+    await updateLevelsOnDate(dateString, doc);
+    console.log('updated levels on date', dateString)
     job.progress(100);
-    return { status: "updated", date };
+
+    return { status: "updated", date, dateString };
   } catch (e) {
     console.error(date, e);
+    return job.retry();
   }
 };
 
