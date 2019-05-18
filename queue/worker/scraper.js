@@ -1,11 +1,10 @@
-const { parse, subDays, format } = require("date-fns");
-const Queue = require("bull");
+const { subDays } = require("date-fns");
 
 const { updateLevelsOnDate, readLevelsOnDate } = require("jw-database");
+let {workQ, scraperQ, notifierQ} = require('./queues.js')
 const { getLevelsData } = require("../util/levels.js");
 const { getDateString } = require("../util/time.js");
 
-let REDIS_URL = process.env.REDIS_URL || "redis://127.0.0.1:6379";
 
 const scraper = async job => {
   console.log("working on job id", job.id);
@@ -13,19 +12,6 @@ const scraper = async job => {
   const dateString = getDateString(date);
   console.log("scraping", dateString);
 
-  if (days > 0) {
-    let scraperQ = new Queue("scraper", REDIS_URL);
-    await scraperQ.add(
-      "scrape",
-      { date: subDays(new Date(date), 1), days: days - 1 },
-      {
-        attempts: 10,
-        backoff: 500
-      }
-    );
-    await scraperQ.close()
-
-  }
   try {
     let existing = undefined;
     existing = await readLevelsOnDate(dateString);
@@ -61,15 +47,13 @@ const scraper = async job => {
               doc.date,
               current.time
             );
-            let notifier = new Queue("notifier", REDIS_URL);
-            await notifier.add("notify", { name, current: {
+            await notifierQ.add("notify", { name, current: {
               ...current,
               date: doc.date
             }, existingCurrent: {
               ...existingPoint.current,
               date: existing.date
             } });
-            await notifier.close()
           }
         }
       }
@@ -78,6 +62,18 @@ const scraper = async job => {
     await updateLevelsOnDate(dateString, doc);
     console.log('updated levels on date', dateString)
     job.progress(100);
+
+    if (days > 0) {
+      await scraperQ.add(
+        "scrape",
+        { date: subDays(new Date(date), 1), days: days - 1 },
+        {
+          attempts: 10,
+          backoff: 500
+        }
+      );
+  
+    }
 
     return { status: "updated", date, dateString };
   } catch (e) {
