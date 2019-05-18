@@ -62,8 +62,22 @@ function getStatus(height, { s3, s2, s1 }) {
   };
 }
 
-function processData(limitsRaw, levelsRaw) {
-  const [, , ...limitsData] = limitsRaw.split("\n");
+function processData(levelsRaw) {
+  const limitsData = [
+    "Bendung Katulampa\t81 ~ 150\t151 ~ 200\t≥ 201",
+    "Pos Depok\t201 ~ 270\t271 ~ 350\t≥ 351",
+    "PA Manggarai\t751 ~ 850\t851 ~ 950\t≥ 951",
+    "PA Karet\t451 ~ 550\t551 ~ 600\t≥ 601",
+    "Pos Krukut Hulu\t151 ~ 250\t251 ~ 300\t≥ 301",
+    "Pos Pesanggrahan\t151 ~ 250\t251 ~ 350\t≥ 351",
+    "Pos Angke Hulu\t151 ~ 250\t251 ~ 300\t≥ 301",
+    "Waduk Pluit\t-51 ~ 0\t1 ~ 45\t≥ 46",
+    "Pasar Ikan\t171 ~ 200\t201 ~ 250\t≥ 251",
+    "Pos Cipinang Hulu\t151 ~ 200\t201 ~ 250\t≥ 251",
+    "Pos Sunter Hulu\t151 ~ 200\t201 ~ 250\t≥ 251",
+    "PA Pulo Gadung\t551 ~ 700\t701 ~ 770\t≥ 771"
+  ];
+
   const [, hourstext, ...levelsData] = levelsRaw.split("\n");
   const hours = hourstext.split("\t");
 
@@ -111,8 +125,8 @@ function processData(limitsRaw, levelsRaw) {
 }
 
 async function getLevelsData(date = null) {
-  const [limits, levels] = await extractLevels(URL, isDev, date);
-  return processData(limits, levels);
+  const levels = await extractLevels(URL, isDev, date);
+  return processData(levels);
 }
 
 module.exports = { getLevelsData };

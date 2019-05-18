@@ -1,7 +1,6 @@
 const puppeteer = require("puppeteer");
 
 const blockThese = ["image", "stylesheet", "font", "script"];
-const selectorTable = "table#listdatatable";
 const selectorSecondTable = "div#table2 > table";
 const selectorForm = "form#waterlevelform";
 const selectorFormInput = "#datepicker-example1";
@@ -64,38 +63,18 @@ async function getTables(url, isDev, date = null) {
     await page.$eval(selectorForm, form => form.submit());
   }
 
-  console.log(
-    date,
-    "waiting for selectors",
-    selectorTable,
-    selectorSecondTable
-  );
-  await Promise.all([
-    page.waitForSelector(selectorSecondTable),
-    page.waitForSelector(selectorTable)
-  ]);
+  console.log(date, "waiting for selectors", selectorSecondTable);
+  await Promise.all([page.waitForSelector(selectorSecondTable)]);
   console.log(date, "selector ready, evaluating");
 
-  let limits;
-  let levels;
-
-  const evaluate = () =>
-    page.evaluate(
-      (s1, s2) => {
-        const l1 = document.querySelector(s1);
-        const l2 = document.querySelector(s2);
-        return [l1.innerText, l2.innerText];
-      },
-      selectorTable,
-      selectorSecondTable
-    );
-
-  while (!limits || !levels) {
-    [limits, levels] = await evaluate(); // eslint-disable-line no-await-in-loop
-  }
+  const levels = await page.evaluate(s => {
+    const l = document.querySelector(s);
+    return l.innerText;
+  }, selectorSecondTable);
+  console.log(levels);
 
   console.log(date, "evaluated");
-  return [limits, levels];
+  return levels;
 }
 
 module.exports = { getTables, extractLevels: getTables };
