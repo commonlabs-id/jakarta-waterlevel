@@ -2,10 +2,11 @@ const { db } = require("./firestore");
 
 const updateLevelsOnDate = async (date, doc) => {
   try {
-    await db
-      .collection("levels")
+    const ref = await db
+      .collection("daily")
       .doc(date)
       .set(doc);
+    return ref;
   } catch (e) {
     console.error(e);
     throw new Error(`Failed to update levels on date ${date}`);
@@ -15,7 +16,7 @@ const updateLevelsOnDate = async (date, doc) => {
 const readLevelsOnDate = async date => {
   try {
     const doc = await db
-      .collection("levels")
+      .collection("daily")
       .doc(date)
       .get();
     return doc.data();
