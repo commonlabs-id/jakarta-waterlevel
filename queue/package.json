@@ -11,7 +11,9 @@
     "express": "^4.16.4",
     "jw-database": "1.0.0",
     "puppeteer": "^1.16.0",
-    "throng": "^4.0.0"
+    "throng": "^4.0.0",
+    "twit": "^2.2.11",
+    "unescape": "^1.0.1"
   },
   "scripts": {
     "web": "node server",

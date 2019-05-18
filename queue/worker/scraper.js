@@ -5,7 +5,7 @@ const { scraperQ, notifierQ } = require("./queues.js");
 const { getLevelsData } = require("../util/levels.js");
 const { getDateString } = require("../util/time.js");
 
-const compareLevels = async (oldLevel, newLevel) => {
+const compareLevels = (oldLevel, newLevel) => {
   let levelDiff;
   let siagaDiff;
   let weatherDiff;
@@ -46,15 +46,25 @@ const compareLevels = async (oldLevel, newLevel) => {
 
 const scraper = async job => {
   console.log("working on job id", job.id);
-  const { date, days = 0 } = job.data;
+  const { date, days = 0, shouldNotify = false } = job.data;
   const dateString = getDateString(date);
   const [y, m, d] = dateString.split("-");
   const dmy = `${d}-${m}-${y}`;
 
   try {
-    let yesterdayData;
+    let existingData = await readLevelsOnDate(getDateString(date));
+    if (typeof existingData === "undefined") {
+      existingData = await readLevelsOnDate(getDateString(date, 1));
+    }
 
     const { points } = await getLevelsData(dmy);
+    if (
+      points.every(point => {
+        return point.current.depth === 0;
+      })
+    ) {
+      throw new Error("Data not ready");
+    }
     await job.progress(25);
 
     const doc = {
@@ -62,35 +72,35 @@ const scraper = async job => {
       points
     };
 
-    const shouldCompareToYesterday = points[0].hours.length === 1;
-    if (shouldCompareToYesterday) {
-      yesterdayData = await readLevelsOnDate(getDateString(date, 1));
-    }
     await job.progress(50);
-
-    for (let i = 0; i < points.length; i++) {
-      const point = points[i];
-      const currentTime = point.current.time;
-      const currentTimeIndex = point.hours.indexOf(currentTime);
-      const oldLevel = shouldCompareToYesterday
-        ? yesterdayData.points[i].current
-        : point.levels[point.hours[currentTimeIndex - 1]];
-      const newLevel = point.levels[currentTime];
-      const { levelDiff, siagaDiff, weatherDiff } = compareLevels(
-        oldLevel,
-        newLevel
-      );
-
-      if (siagaDiff === "up") {
-        notifierQ.add("notify", {
-          name: point.name,
-          date: dateString,
-          old: oldLevel,
-          new: newLevel,
-          levelDiff,
-          siagaDiff,
-          weatherDiff
-        });
+    console.log("should notify", shouldNotify);
+    if (shouldNotify) {
+      for (let i = 0; i < points.length; i++) {
+        const point = points[i];
+        const oldPoint = existingData.points.find(p => p.name === point.name);
+        if (oldPoint) {
+          const oldLevel = oldPoint.current;
+          const newLevel = point.current;
+          if (
+            existingData.date !== dateString ||
+            newLevel.time !== oldLevel.time
+          ) {
+            const { levelDiff, siagaDiff, weatherDiff } = compareLevels(
+              oldLevel,
+              newLevel
+            );
+            const diff = {
+              name: point.name,
+              date: dateString,
+              old: oldLevel,
+              new: newLevel,
+              levelDiff,
+              siagaDiff,
+              weatherDiff
+            };
+            notifierQ.add("notify", diff);
+          }
+        }
       }
     }
 

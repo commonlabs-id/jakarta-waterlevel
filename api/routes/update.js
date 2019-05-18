@@ -9,7 +9,7 @@ async function handler(_, res) {
   const date = new Date().toISOString();
   try {
     const scraperQ = new Queue("scraper", REDIS_URL);
-    const job = await scraperQ.add("scrape", { date });
+    const job = await scraperQ.add("scrape", { date, shouldNotify: true });
     await scraperQ.close();
     const body = {
       date,
