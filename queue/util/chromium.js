@@ -7,6 +7,8 @@ const exePath =
 
 const blockThese = ["image", "stylesheet", "font", "script"];
 const selectorTable = "table#listdatatable";
+const selectorForm = "form#waterlevelform";
+const selectorFormInput = "#datepicker-example1"
 let _page = null;
 
 async function getOptions(isDev) {
@@ -14,8 +16,7 @@ async function getOptions(isDev) {
   if (isDev) {
     options = {
       args: [],
-      executablePath: exePath,
-      headless: true
+      headless: false
     };
   } else {
     options = {
@@ -38,20 +39,34 @@ async function getPage(isDev) {
   _page = await browser.newPage();
   await _page.setRequestInterception(true);
   _page.on("request", request => {
-    if (blockThese.indexOf(request.resourceType()) !== -1) request.abort();
-    else request.continue();
+    if (blockThese.indexOf(request.resourceType()) !== -1) {
+      request.abort();
+    } else {
+      request.continue();
+    }
   });
   return _page;
 }
 
-async function getTables(url, isDev) {
+async function getTables(url, isDev, date = null) {
   const page = await getPage(isDev);
   console.log("page ready");
-  console.log("going to ", url);
+  console.log("going to", url);
   await page.goto(url, {
     timeout: 3000000
   });
 
+  if (date) {
+    console.log("waiting for form", selectorForm);
+    await page.$eval(
+      selectorFormInput,
+      (i, date) => (i.value = date),
+      date
+    );
+    await page.$eval(selectorForm, form => form.submit());
+  }
+
+  console.log("waiting for selector", selectorTable);
   await page.waitForSelector(selectorTable);
   console.log("selector ready, evaluating");
   const [limits, levels] = await page.evaluate(s => {
