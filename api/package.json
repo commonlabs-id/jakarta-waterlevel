@@ -3,12 +3,10 @@
   "version": "1.0.0",
   "dependencies": {
     "bull": "^3.9.1",
-    "chrome-aws-lambda": "1.11.1",
-    "jw-database": "1.0.0",
-    "date-fns": "2.0.0-alpha.27",
+    "date-fns": "^2.0.0-alpha.27",
     "date-fns-tz": "1.0.7",
-    "micro": "^9.3.3",
-    "puppeteer-core": "1.11.0"
+    "jw-database": "1.0.0",
+    "micro": "^9.3.3"
   },
   "private": true
 }

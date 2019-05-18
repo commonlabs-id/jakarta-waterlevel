@@ -6,6 +6,8 @@
   "dependencies": {
     "bull": "^3.9.1",
     "bull-arena": "^2.6.3",
+    "date-fns": "^2.0.0-alpha.27",
+    "date-fns-tz": "^1.0.7",
     "express": "^4.16.4",
     "jw-database": "1.0.0",
     "puppeteer": "^1.16.0",
