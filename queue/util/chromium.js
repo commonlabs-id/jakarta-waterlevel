@@ -28,7 +28,7 @@ async function getPage(isDev) {
   }
   console.log("creating new page");
   const options = await getOptions(isDev);
-  console.log("got options");
+  console.log("got options", options);
   const browser = await puppeteer.launch(options);
   console.log("browser launched");
   _page = await browser.newPage();

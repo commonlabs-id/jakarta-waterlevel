@@ -78,7 +78,7 @@ const scraper = async job => {
     return { status: "updated", date, dateString };
   } catch (e) {
     console.error(date, e);
-    return job.retry();
+    throw e
   }
 };
 
