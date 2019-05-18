@@ -64,18 +64,35 @@ async function getTables(url, isDev, date = null) {
     await page.$eval(selectorForm, form => form.submit());
   }
 
-  console.log(date, "waiting for selector", selectorSecondTable);
-  await page.waitForSelector(selectorSecondTable);
-  console.log(date, "selector ready, evaluating");
-  const [limits, levels] = await page.evaluate(
-    (s1, s2) => {
-      const l1 = document.querySelector(s1);
-      const l2 = document.querySelector(s2);
-      return [l1.innerText, l2.innerText];
-    },
+  console.log(
+    date,
+    "waiting for selectors",
     selectorTable,
     selectorSecondTable
   );
+  await Promise.all([
+    page.waitForSelector(selectorSecondTable),
+    page.waitForSelector(selectorTable)
+  ]);
+  console.log(date, "selector ready, evaluating");
+
+  let limits;
+  let levels;
+
+  const evaluate = () =>
+    page.evaluate(
+      (s1, s2) => {
+        const l1 = document.querySelector(s1);
+        const l2 = document.querySelector(s2);
+        return [l1.innerText, l2.innerText];
+      },
+      selectorTable,
+      selectorSecondTable
+    );
+
+  while (!limits || !levels) {
+    [limits, levels] = await evaluate(); // eslint-disable-line no-await-in-loop
+  }
 
   console.log(date, "evaluated");
   return [limits, levels];
