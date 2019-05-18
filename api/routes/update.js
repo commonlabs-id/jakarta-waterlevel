@@ -10,7 +10,7 @@ async function handler(_, res) {
   try {
     const scraperQ = new Queue("scraper", REDIS_URL);
     const job = await scraperQ.add("scrape", { date });
-    await workQueue.close();
+    await scraperQ.close();
     const body = {
       date,
       id: job.id
