@@ -4,6 +4,7 @@ const blockThese = ["image", "stylesheet", "font", "script"];
 const selectorSecondTable = "div#table2 table#listdatatable";
 const selectorForm = "form#waterlevelform";
 const selectorFormInput = "#datepicker-example1";
+const selectorEnd = "#chartContainer";
 let _page = null;
 
 async function getOptions(isDev) {
@@ -21,16 +22,14 @@ async function getOptions(isDev) {
   return options;
 }
 
-async function getPage(isDev) {
+async function getPage(isDev, date = null) {
   if (_page) {
-    console.log("reusing page");
+    console.log(date, "reusing page");
     return _page;
   }
-  console.log("creating new page");
+  console.log(date, "creating new page");
   const options = await getOptions(isDev);
-  console.log("got options", options);
   const browser = await puppeteer.launch(options);
-  console.log("browser launched");
   _page = await browser.newPage();
   await _page.setRequestInterception(true);
   _page.on("request", request => {
@@ -44,13 +43,14 @@ async function getPage(isDev) {
 }
 
 async function getTables(url, isDev, date = null) {
-  const page = await getPage(isDev);
+  const page = await getPage(isDev, date);
   console.log(date, "page ready");
-  console.log(date, "going to", url);
+
   await page.goto(url, {
     timeout: 3000000
   });
 
+  console.log(date, "arrived at", url);
   if (date) {
     await page.$eval(
       selectorFormInput,
@@ -59,20 +59,21 @@ async function getTables(url, isDev, date = null) {
       },
       date
     );
+
+    console.log(date, "going to date", date);
     await page.$eval(selectorForm, form => form.submit());
   }
 
-  console.log(date, "waiting for selectors", "#chartContainer");
-  await Promise.all([page.waitForSelector("#chartContainer")]);
+  console.log(date, "waiting for selector", selectorEnd);
+  await Promise.all([page.waitForSelector(selectorEnd)]);
   console.log(date, "selector ready, evaluating");
 
   const levels = await page.$eval(
     selectorSecondTable,
     table => table.innerText
   );
-  console.log(levels);
 
-  console.log(date, "evaluated");
+  console.log(date, "scraped levels data");
   return levels;
 }
 

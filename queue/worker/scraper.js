@@ -5,60 +5,92 @@ const { scraperQ, notifierQ } = require("./queues.js");
 const { getLevelsData } = require("../util/levels.js");
 const { getDateString } = require("../util/time.js");
 
+const compareLevels = async (oldLevel, newLevel) => {
+  let levelDiff;
+  let siagaDiff;
+  let weatherDiff;
+
+  const weatherArray = ["T", "MT", "M", "G", "H"];
+  const oldWeatherIndex = weatherArray.indexOf(oldLevel.weather);
+  const newWeatherIndex = weatherArray.indexOf(newLevel.weather);
+
+  if (oldLevel.depth > newLevel.depth) {
+    levelDiff = "down";
+  } else if (oldLevel.depth === newLevel.depth) {
+    levelDiff = "none";
+  } else {
+    levelDiff = "up";
+  }
+
+  if (oldLevel.status.siaga > newLevel.status.siaga) {
+    siagaDiff = "up";
+  } else if (oldLevel.status.siaga === newLevel.status.siaga) {
+    siagaDiff = "none";
+  } else {
+    siagaDiff = "down";
+  }
+  if (oldWeatherIndex > newWeatherIndex) {
+    weatherDiff = "down";
+  } else if (oldWeatherIndex === newWeatherIndex) {
+    weatherDiff = "none";
+  } else {
+    weatherDiff = "up";
+  }
+
+  return {
+    levelDiff,
+    siagaDiff,
+    weatherDiff
+  };
+};
+
 const scraper = async job => {
   console.log("working on job id", job.id);
   const { date, days = 0 } = job.data;
   const dateString = getDateString(date);
-  console.log("scraping", dateString);
+  const [y, m, d] = dateString.split("-");
+  const dmy = `${d}-${m}-${y}`;
 
   try {
-    let existing;
-    existing = await readLevelsOnDate(dateString);
-    job.progress(20);
+    let yesterdayData;
 
-    if (!existing) {
-      existing = await readLevelsOnDate(getDateString(date, 1));
-    }
-
-    job.progress(25);
-    const [y, m, d] = dateString.split("-");
-    const levels = await getLevelsData(`${d}-${m}-${y}`);
-    job.progress(50);
+    const { points } = await getLevelsData(dmy);
+    await job.progress(25);
 
     const doc = {
       date: dateString,
-      ...levels
+      points
     };
 
-    if (typeof existing !== "undefined") {
-      for (let i = 0; i < doc.points.length; i++) {
-        const { name, current } = doc.points[i];
-        const existingPoint = existing.points.find(ep => ep.name === name);
-        if (typeof existingPoint !== "undefined") {
-          if (existingPoint.current.status.siaga !== current.status.siaga) {
-            console.log(
-              name,
-              existing.date,
-              existingPoint.current.time,
-              existingPoint.current.status.siaga,
-              "->",
-              current.status.siaga,
-              doc.date,
-              current.time
-            );
-            notifierQ.add("notify", {
-              name,
-              current: {
-                ...current,
-                date: doc.date
-              },
-              existingCurrent: {
-                ...existingPoint.current,
-                date: existing.date
-              }
-            });
-          }
-        }
+    const shouldCompareToYesterday = points[0].hours.length === 1;
+    if (shouldCompareToYesterday) {
+      yesterdayData = await readLevelsOnDate(getDateString(date, 1));
+    }
+    await job.progress(50);
+
+    for (let i = 0; i < points.length; i++) {
+      const point = points[i];
+      const currentTime = point.current.time;
+      const currentTimeIndex = point.hours.indexOf(currentTime);
+      const oldLevel = shouldCompareToYesterday
+        ? yesterdayData.points[i].current
+        : point.levels[point.hours[currentTimeIndex - 1]];
+      const newLevel = point.levels[currentTime];
+      const { levelDiff, siagaDiff, weatherDiff } = compareLevels(
+        oldLevel,
+        newLevel
+      );
+
+      if (siagaDiff === "up") {
+        notifierQ.add("notify", {
+          name: point.name,
+          date: dateString,
+          old: oldLevel,
+          new: newLevel,
+          levelDiff,
+          siagaDiff,
+          weatherDiff
+        });
       }
     }
 
