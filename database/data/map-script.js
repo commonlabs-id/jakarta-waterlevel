@@ -3,16 +3,10 @@ $(document).ready(function() {
     initialize();
 
     osmConfig = new google.maps.ImageMapType({
-      getTileUrl: function(coord, zoom) {
-        return (
-          "https://bpbd.jakarta.go.id/osm_tiles/" +
-          zoom +
-          "/" +
-          coord.x +
-          "/" +
-          coord.y +
-          ".png"
-        );
+      getTileUrl(coord, zoom) {
+        return `https://bpbd.jakarta.go.id/osm_tiles/${zoom}/${coord.x}/${
+          coord.y
+        }.png`;
       },
       tileSize: new google.maps.Size(256, 256),
       name: "Pintu Muka Air",
@@ -22,7 +16,7 @@ $(document).ready(function() {
     map.mapTypes.set("OSM", osmConfig);
     map.setCenter(new google.maps.LatLng(-6.266737, 106.859134));
 
-    var marker = new Array();
+    const marker = new Array();
 
     var tmaProp = new Array();
     tmaProp[0] = new Object();

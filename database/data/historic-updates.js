@@ -7,7 +7,7 @@ const csv = require("fast-csv");
 const { updateLevelsOnDate } = require("../api/firebase/operations");
 
 const file = join(__dirname, "data-tinggi-muka-air-april-2019.csv");
-var stream = createReadStream(file);
+const stream = createReadStream(file);
 
 const HEADERS = {
   JANUARY: [

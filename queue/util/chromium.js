@@ -54,7 +54,13 @@ async function getTables(url, isDev, date = null) {
 
   if (date) {
     console.log(date, "waiting for form", selectorForm);
-    await page.$eval(selectorFormInput, (i, date) => (i.value = date), date);
+    await page.$eval(
+      selectorFormInput,
+      (i, d) => {
+        i.value = d; // eslint-disable-line no-param-reassign
+      },
+      date
+    );
     await page.$eval(selectorForm, form => form.submit());
   }
 

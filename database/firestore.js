@@ -6,7 +6,7 @@ const config = {
   credential: admin.credential.cert(sA)
 };
 
-let db = undefined;
+let db;
 
 const getDB = () => {
   if (db) {

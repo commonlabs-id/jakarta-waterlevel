@@ -1,12 +1,12 @@
-let throng = require("throng");
+const throng = require("throng");
 
-let { scraperQ, notifierQ } = require("./queues.js");
-let scraperProcessor = require("./scraper.js");
-let notifierProcessor = require("./notifier.js");
+const { scraperQ, notifierQ } = require("./queues.js");
+const scraperProcessor = require("./scraper.js");
+const notifierProcessor = require("./notifier.js");
 
-let workers = process.env.WEB_CONCURRENCY || 2;
+const workers = process.env.WEB_CONCURRENCY || 2;
 
-let maxJobsPerWorker = 50;
+const maxJobsPerWorker = 50;
 
 function start() {
   scraperQ.process("*", 1, scraperProcessor);

@@ -1,9 +1,9 @@
-let Queue = require("bull");
+const Queue = require("bull");
 
-let REDIS_URL = process.env.REDIS_URL || "redis://127.0.0.1:6379";
+const REDIS_URL = process.env.REDIS_URL || "redis://127.0.0.1:6379";
 
-let scraperQ = new Queue("scraper", REDIS_URL);
-let notifierQ = new Queue("notifier", REDIS_URL);
+const scraperQ = new Queue("scraper", REDIS_URL);
+const notifierQ = new Queue("notifier", REDIS_URL);
 
 module.exports = {
   scraperQ,

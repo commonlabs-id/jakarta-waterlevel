@@ -1,12 +1,12 @@
-let express = require("express");
-let Arena = require("bull-arena");
+const express = require("express");
+const Arena = require("bull-arena");
 const { scraperQ, notifierQ, REDIS_URL } = require("./worker/queues");
 
-let PORT = process.env.PORT || "5000";
+const PORT = process.env.PORT || "5000";
 
-let app = express();
+const app = express();
 
-let arena = Arena(
+const arena = Arena(
   {
     queues: [
       {
@@ -29,17 +29,17 @@ let arena = Arena(
 );
 
 app.get("/job/:queue/:id", async (req, res) => {
-  let queue = req.params.queue;
-  let q = (queue === queue) === "notifier" ? notifierQ : scraperQ;
-  let id = req.params.id;
-  let job = await q.getJob(id);
+  const { queue } = req.params;
+  const q = queue === "notifier" ? notifierQ : scraperQ;
+  const { id } = req.params;
+  const job = await q.getJob(id);
 
   if (job === null) {
     res.status(404).end();
   } else {
-    let state = await job.getState();
-    let progress = job._progress;
-    let reason = job.failedReason;
+    const state = await job.getState();
+    const progress = job._progress;
+    const reason = job.failedReason;
     res.json({ id, state, progress, reason, queue });
   }
 });
