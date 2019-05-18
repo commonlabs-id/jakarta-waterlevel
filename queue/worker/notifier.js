@@ -60,7 +60,7 @@ const createTweetFromNotice = notice => {
     `${hook} ${name}${siagaLabel}: Water level is ${risingOrDownTo} ${depth}cm (prev. ${
       old.depth
     }cm @ ${old.time}) - Weather on site: ${weatherLabels[weather] ||
-      "unknown 🤔"}.`
+      "unknown 🤔"}. #TinggiMukaAir`
   ];
 };
 
