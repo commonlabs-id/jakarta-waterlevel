@@ -2,6 +2,7 @@ const puppeteer = require("puppeteer");
 
 const blockThese = ["image", "stylesheet", "font", "script"];
 const selectorTable = "table#listdatatable";
+const selectorSecondTable = "div#table2 > table";
 const selectorForm = "form#waterlevelform";
 const selectorFormInput = "#datepicker-example1"
 let _page = null;
@@ -10,8 +11,8 @@ async function getOptions(isDev) {
   let options = {};
   if (isDev) {
     options = {
-      args: [],
-      headless: false
+      args: ["--no-sandbox"],
+      headless: true
     };
   } else {
     options = {
@@ -61,7 +62,7 @@ async function getTables(url, isDev, date = null) {
     await page.$eval(selectorForm, form => form.submit());
   }
 
-  console.log(date, "waiting for selector", selectorTable);
+  console.log(date, "waiting for selector", selectorSecondTable);
   await page.waitForSelector(selectorTable);
   console.log(date, "selector ready, evaluating");
   const [limits, levels] = await page.evaluate(s => {

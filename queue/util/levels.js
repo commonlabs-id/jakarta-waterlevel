@@ -9,9 +9,6 @@ async function getLevelsData(date = null) {
 }
 
 function processData(limitsRaw, levelsRaw) {
-  console.log('reformatting data')
-  console.log(limitsRaw)
-  console.log(levelsRaw)
   const [_, __, ...limitsData] = limitsRaw.split("\n");
   const [___, hourstext, ...levelsData] = levelsRaw.split("\n");
   const hours = hourstext.split("\t");
