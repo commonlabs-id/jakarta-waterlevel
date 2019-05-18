@@ -63,7 +63,7 @@ async function getTables(url, isDev, date = null) {
   }
 
   console.log(date, "waiting for selector", selectorSecondTable);
-  await page.waitForSelector(selectorTable);
+  await page.waitForSelector(selectorSecondTable);
   console.log(date, "selector ready, evaluating");
   const [limits, levels] = await page.evaluate(s => {
     const tables = Array.from(document.querySelectorAll(s));
