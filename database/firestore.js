@@ -6,7 +6,12 @@ const config = {
   credential: admin.credential.cert(sA)
 };
 
+let db = undefined;
+
 const getDB = () => {
+  if (db) {
+    return db;
+  }
   try {
     admin.initializeApp(config);
     console.log("Database initialized");
@@ -18,11 +23,10 @@ const getDB = () => {
     }
   }
 
-  const db = admin.firestore();
-  return db;
+  return admin.firestore();
 };
 
-const db = getDB();
+db = getDB();
 
 module.exports = {
   db

@@ -5,16 +5,12 @@ const IS_DEV = require("../utils/is-dev");
 
 const REDIS_URL = IS_DEV ? "redis://127.0.0.1:6379" : process.env.JW_REDIS_URL;
 
-let workQueue;
-
 async function handler(_, res) {
   const date = new Date().toISOString();
   try {
-    if (!workQueue) {
-      console.log(`connecting to ${REDIS_URL}`);
-      workQueue = new Queue("scraper", REDIS_URL);
-    }
-    const job = await workQueue.add("scrape", { date });
+    const scraperQ = new Queue("scraper", REDIS_URL);
+    const job = await scraperQ.add("scrape", { date });
+    await workQueue.close();
     const body = {
       date,
       id: job.id

@@ -4,7 +4,7 @@ const blockThese = ["image", "stylesheet", "font", "script"];
 const selectorTable = "table#listdatatable";
 const selectorSecondTable = "div#table2 > table";
 const selectorForm = "form#waterlevelform";
-const selectorFormInput = "#datepicker-example1"
+const selectorFormInput = "#datepicker-example1";
 let _page = null;
 
 async function getOptions(isDev) {
@@ -54,26 +54,24 @@ async function getTables(url, isDev, date = null) {
 
   if (date) {
     console.log(date, "waiting for form", selectorForm);
-    await page.$eval(
-      selectorFormInput,
-      (i, date) => (i.value = date),
-      date
-    );
+    await page.$eval(selectorFormInput, (i, date) => (i.value = date), date);
     await page.$eval(selectorForm, form => form.submit());
   }
 
   console.log(date, "waiting for selector", selectorSecondTable);
   await page.waitForSelector(selectorSecondTable);
   console.log(date, "selector ready, evaluating");
-  const [limits, levels] = await page.evaluate(s => {
-    const tables = Array.from(document.querySelectorAll(s));
-    return tables.map(table => {
-      return table.innerText;
-    });
-  }, selectorTable);
+  const [limits, levels] = await page.evaluate(
+    (s1, s2) => {
+      const l1 = document.querySelector(s1);
+      const l2 = document.querySelector(s2);
+      return [l1.innerText, l2.innerText];
+    },
+    selectorTable,
+    selectorSecondTable
+  );
 
   console.log(date, "evaluated");
-
   return [limits, levels];
 }
 

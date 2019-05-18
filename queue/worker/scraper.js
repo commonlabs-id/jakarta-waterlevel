@@ -1,10 +1,9 @@
 const { subDays } = require("date-fns");
 
 const { updateLevelsOnDate, readLevelsOnDate } = require("jw-database");
-let {workQ, scraperQ, notifierQ} = require('./queues.js')
+let { scraperQ, notifierQ } = require("./queues.js");
 const { getLevelsData } = require("../util/levels.js");
 const { getDateString } = require("../util/time.js");
-
 
 const scraper = async job => {
   console.log("working on job id", job.id);
@@ -47,20 +46,24 @@ const scraper = async job => {
               doc.date,
               current.time
             );
-            await notifierQ.add("notify", { name, current: {
-              ...current,
-              date: doc.date
-            }, existingCurrent: {
-              ...existingPoint.current,
-              date: existing.date
-            } });
+            await notifierQ.add("notify", {
+              name,
+              current: {
+                ...current,
+                date: doc.date
+              },
+              existingCurrent: {
+                ...existingPoint.current,
+                date: existing.date
+              }
+            });
           }
         }
       }
     }
 
     await updateLevelsOnDate(dateString, doc);
-    console.log('updated levels on date', dateString)
+    console.log("updated levels on date", dateString);
     job.progress(100);
 
     if (days > 0) {
@@ -72,13 +75,12 @@ const scraper = async job => {
           backoff: 500
         }
       );
-  
     }
 
     return { status: "updated", date, dateString };
   } catch (e) {
     console.error(date, e);
-    throw e
+    throw e;
   }
 };
 
