@@ -1,7 +1,7 @@
 const puppeteer = require("puppeteer");
 
 const blockThese = ["image", "stylesheet", "font", "script"];
-const selectorSecondTable = "div#table2 > table";
+const selectorSecondTable = "div#table2 table#listdatatable";
 const selectorForm = "form#waterlevelform";
 const selectorFormInput = "#datepicker-example1";
 let _page = null;
@@ -11,7 +11,7 @@ async function getOptions(isDev) {
   if (isDev) {
     options = {
       args: ["--no-sandbox"],
-      headless: true
+      headless: false
     };
   } else {
     options = {
@@ -52,7 +52,6 @@ async function getTables(url, isDev, date = null) {
   });
 
   if (date) {
-    console.log(date, "waiting for form", selectorForm);
     await page.$eval(
       selectorFormInput,
       (i, d) => {
@@ -63,14 +62,14 @@ async function getTables(url, isDev, date = null) {
     await page.$eval(selectorForm, form => form.submit());
   }
 
-  console.log(date, "waiting for selectors", selectorSecondTable);
-  await Promise.all([page.waitForSelector(selectorSecondTable)]);
+  console.log(date, "waiting for selectors", "#chartContainer");
+  await Promise.all([page.waitForSelector("#chartContainer")]);
   console.log(date, "selector ready, evaluating");
 
-  const levels = await page.evaluate(s => {
-    const l = document.querySelector(s);
-    return l.innerText;
-  }, selectorSecondTable);
+  const levels = await page.$eval(
+    selectorSecondTable,
+    table => table.innerText
+  );
   console.log(levels);
 
   console.log(date, "evaluated");

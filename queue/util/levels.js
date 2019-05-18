@@ -80,7 +80,7 @@ function processData(levelsRaw) {
 
   const [, hourstext, ...levelsData] = levelsRaw.split("\n");
   const hours = hourstext.split("\t");
-
+  console.log(levelsData);
   const points = limitsData.map((datatext, index) => {
     const [name, s3, s2, s1] = datatext.split("\t");
     const levelData = levelsData[index];
