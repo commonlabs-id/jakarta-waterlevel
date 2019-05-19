@@ -3,7 +3,7 @@ const Arena = require("bull-arena");
 const { scraperQ, notifierQ, REDIS_URL } = require("./worker/queues");
 
 const PORT = process.env.PORT || "5000";
-
+const date = new Date().toISOString();
 const app = express();
 
 const arena = Arena(
@@ -27,6 +27,10 @@ const arena = Arena(
     disableListen: true
   }
 );
+
+app.get("/ping", (req, res) => {
+  res.json({ status: "ok", started: date });
+});
 
 app.get("/job/:queue/:id", async (req, res) => {
   const { queue } = req.params;
