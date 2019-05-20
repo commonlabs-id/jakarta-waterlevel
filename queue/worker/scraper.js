@@ -58,14 +58,15 @@ const scraper = async job => {
     }
 
     const { points } = await getLevelsData(dmy);
+    await job.progress(25);
     if (
       points.every(point => {
         return point.current.depth === 0;
-      })
+      }) ||
+      points.some(point => point.current.weather === "NA")
     ) {
       throw new Error("Data not ready");
     }
-    await job.progress(25);
 
     const doc = {
       date: dateString,
@@ -79,8 +80,18 @@ const scraper = async job => {
         const point = points[i];
         const oldPoint = existingData.points.find(p => p.name === point.name);
         if (oldPoint) {
-          const oldLevel = oldPoint.current;
+          let oldLevel = oldPoint.current;
           const newLevel = point.current;
+          const isExistingSameDateTime =
+            existingData.date === dateString && newLevel.time === oldLevel.time;
+          if (isExistingSameDateTime && oldLevel.depth !== newLevel.depth) {
+            const prevHour =
+              oldPoint.hours[oldPoint.hours.indexOf(oldLevel.time) - 1];
+            oldLevel = {
+              ...oldPoint.levels[prevHour],
+              time: prevHour
+            };
+          }
           if (
             existingData.date !== dateString ||
             newLevel.time !== oldLevel.time
