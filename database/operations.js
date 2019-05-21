@@ -26,7 +26,35 @@ const readLevelsOnDate = async date => {
   }
 };
 
+const readPointWithName = async name => {
+  try {
+    const doc = await db
+      .collection("sensors")
+      .doc(name)
+      .get();
+    return doc.data();
+  } catch (e) {
+    console.error(e);
+    throw new Error(`Can't read pint with name ${name}`);
+  }
+};
+
+const updatePointWithName = async (name, doc) => {
+  try {
+    const ref = await db
+      .collection("sensors")
+      .doc(name)
+      .set(doc);
+    return ref;
+  } catch (e) {
+    console.error(e);
+    throw new Error(`Can't read pint with name ${name}`);
+  }
+};
+
 module.exports = {
   updateLevelsOnDate,
-  readLevelsOnDate
+  readLevelsOnDate,
+  readPointWithName,
+  updatePointWithName
 };

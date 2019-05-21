@@ -1,6 +1,13 @@
-const { readLevelsOnDate, updateLevelsOnDate } = require("./operations");
+const {
+  readLevelsOnDate,
+  updateLevelsOnDate,
+  readPointWithName,
+  updatePointWithName
+} = require("./operations");
 
 module.exports = {
   readLevelsOnDate,
-  updateLevelsOnDate
+  updateLevelsOnDate,
+  readPointWithName,
+  updatePointWithName
 };
