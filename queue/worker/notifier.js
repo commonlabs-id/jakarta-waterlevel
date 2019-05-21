@@ -41,7 +41,7 @@ const createTweetFromNotice = notice => {
   if (siagaDiff === "up") {
     tag = "alert";
     hook = `🚨`.repeat(4 - siaga);
-    siagaLabel = ` Siaga ${siaga} -> ${old.status.siaga}`;
+    siagaLabel = ` Siaga ${old.status.siaga} -> ${siaga}`;
   } else if (siaga < 4 && levelDiff === "up") {
     tag = "warning";
     hook = `⚠️`.repeat(4 - siaga);
